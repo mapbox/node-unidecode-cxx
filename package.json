@@ -1,0 +1,16 @@
+{
+  "name": "unidecode-cxx",
+  "version": "0.0.1",
+  "description": "node-unidecode ported to C++",
+  "main": "./unidecode",
+  "keywords": [
+    "unidecode",
+    "unicode",
+    "utf8"
+  ],
+  "author": "Andrew Pendleton <andrew@mapbox.com>",
+  "license": "MIT",
+  "dependencies": {
+    "nan": "2.0.9"
+  }
+}

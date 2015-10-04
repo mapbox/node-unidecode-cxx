@@ -1,0 +1,1 @@
+module.exports = require("./build/Release/unidecode.node").decode;
