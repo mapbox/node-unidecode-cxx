@@ -8,9 +8,15 @@
     "unicode",
     "utf8"
   ],
+  "scripts": {
+    "test": "mocha"
+  },
   "author": "Andrew Pendleton <andrew@mapbox.com>",
   "license": "MIT",
   "dependencies": {
     "nan": "2.0.9"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1"
   }
 }
