@@ -17,6 +17,7 @@
     "nan": "2.0.9"
   },
   "devDependencies": {
-    "mocha": "^2.0.1"
+    "mocha": "^2.0.1",
+    "unidecode": "*"
   }
 }
