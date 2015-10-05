@@ -24,7 +24,7 @@ using Nan::Set;
 NAN_METHOD(decode) {
   // expect a number as the first argument
   String::Utf8Value utf8_value(info[0].As<String>());
-  string input = string(*utf8_value);
+  string input = string(*utf8_value, utf8_value.length());
   stringbuf output;
   unidecode(input, &output);
 
