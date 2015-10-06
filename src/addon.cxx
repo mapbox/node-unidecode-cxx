@@ -8,7 +8,6 @@
 
 #include <nan.h>
 #include <string>
-#include <sstream>
 #include "unidecode.cxx"
 
 using v8::FunctionTemplate;
@@ -25,10 +24,10 @@ NAN_METHOD(decode) {
   // expect a number as the first argument
   String::Utf8Value utf8_value(info[0].As<String>());
   string input = string(*utf8_value, utf8_value.length());
-  stringbuf output;
-  unidecode(input, &output);
+  string output;
+  unidecode(&input, &output);
 
-  info.GetReturnValue().Set(New(output.str()).ToLocalChecked());
+  info.GetReturnValue().Set(New(output).ToLocalChecked());
 }
 
 // Expose synchronous and asynchronous access to our

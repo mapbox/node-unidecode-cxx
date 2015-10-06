@@ -1,17 +1,13 @@
-#include <iostream>
 #include <string>
-#include <sstream>
 #include "../deps/utf8cpp/utf8.h"
 
 #include "data.cxx"
 
 using namespace std;
 
-void unidecode(string input, stringbuf* output_buf) {
-    ostream output_stream(output_buf);
-
-    char* str_i = (char*) input.data();
-    char* end = str_i + input.length();
+void unidecode(string* input, string* output) {
+    char* str_i = (char*) input->data();
+    char* end = str_i + input->length();
 
     do {
         uint32_t code;
@@ -23,7 +19,7 @@ void unidecode(string input, stringbuf* output_buf) {
         }
 
         if (code == 0) {
-            output_buf->sputc('\x00');
+            *output += '\x00';
             continue;
         }
 
@@ -33,7 +29,7 @@ void unidecode(string input, stringbuf* output_buf) {
             // as I can tell, so this code path is never exercised and nothing is appended instead
             // so I'm emulating that behavior here
 
-            //output_stream << "_";
+            //*output += '_';
             continue;
         } else {
             uint32_t h = code >> 8;
@@ -46,7 +42,7 @@ void unidecode(string input, stringbuf* output_buf) {
             if (h > 215 && h < 249) continue;
 
             if (UNIDECODE_DATA[h]) {
-                output_stream << UNIDECODE_DATA[h][l];
+                *output += UNIDECODE_DATA[h][l];
             }
         }
     } while (str_i < end);
