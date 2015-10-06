@@ -1,6 +1,6 @@
 /**
  * Tests are taken from Text-Unidecode-0.04/test.pl
- * 
+ *
  * @see <http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm>
  */
 
@@ -10,11 +10,14 @@
 
 var assert = require('assert');
 var unidecode = require('../unidecode');
+var unidecodeOrig = require("unidecode");
+var request = require('request');
+var fs = require('fs');
 
 describe('# Purity tests', function(){
 	var code;
 	var tests = [];
-	
+
 	for(code=0; code<=127; code++) {
 		tests.push(String.fromCharCode(code));
 	}
@@ -37,7 +40,7 @@ describe('# Basic string tests', function(){
 		"\r\n", // "\cm\cj" - perl control chars Ctrl+M, CTRL+J === \r\n
 		"I like pie.\n",
 	];
-	
+
 	tests.forEach(function(test) {
 		it(test, function(){
 			var exp = test;
@@ -72,12 +75,59 @@ describe('# Complex tests', function(){
 		["\u3052\u3093\u307e\u3044\u8336", "genmaiCha "],
 		//  Japanese, astonishingly unmangled.
 	];
-	
+
 	tests.forEach(function(test) {
 		it(test[0] + '-->' + test[1], function(){
 			var exp = test[1];
 			var res = unidecode(test[0]);
 			assert.equal(res, exp);
 		});
+	});
+});
+
+describe("# Match upstream behavior", function() {
+	var testData = function(body, done) {
+		var lines = body.split("\n");
+
+		var error = false;
+		for (var j = 0; j < lines.length; j++) {
+			var upstream = unidecodeOrig(lines[j]);
+			var current = unidecode(lines[j]);
+
+			if (upstream != current) {
+				console.log("no match");
+				console.log("upstream:", upstream);
+				console.log("local:", current);
+				error = true;
+			}
+		}
+		if (error) {
+			throw "match to upstream failed";
+		}
+		done();
+	}
+
+	var urlTests = [
+		["Gutenberg sample 血笑記", "http://www.gutenberg.org/files/34013/34013-0.txt"],
+		["UTF-8 decoder capability and stress test", "http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt"],
+		["Unicode spec emoji sample", "http://www.unicode.org/emoji/charts/emoji-style.html"]
+	];
+	urlTests.forEach(function(row) {
+		it("should parse " + row[0] + " the same as upstream", function(done) {
+			request.get(row[1], function(err, response, body) {
+				testData(body, done);
+			})
+		})
+	});
+
+	var localTests = [
+		["random data", "./test/random.dat"]
+	];
+	localTests.forEach(function(row) {
+		it("should parse " + row[0] + " the same as upstream", function(done) {
+			fs.readFile(row[1], function(err, body) {
+				testData(body.toString(), done);
+			})
+		})
 	});
 });
