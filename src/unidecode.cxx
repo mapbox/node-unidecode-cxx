@@ -28,7 +28,12 @@ void unidecode(string input, stringbuf* output_buf) {
         }
 
         if (code > 0xFFFF) {
-            output_stream << "_";
+            // in this situation in the upstream code, ostensibly an underscore is appended
+            // but the UTF8 parsing of >16bit characters in node-unidecode is incorrect as far
+            // as I can tell, so this code path is never exercised and nothing is appended instead
+            // so I'm emulating that behavior here
+
+            //output_stream << "_";
             continue;
         } else {
             uint32_t h = code >> 8;
