@@ -14,7 +14,14 @@ void unidecode(string input, stringbuf* output_buf) {
     char* end = str_i + input.length() + 1;
 
     do {
-        uint32_t code = utf8::next(str_i, end); // get 32 bit code of a utf-8 symbol
+        uint32_t code;
+        try {
+            code = utf8::next(str_i, end); // get 32 bit code of a utf-8 symbol
+        } catch (utf8::exception) {
+            str_i++;
+            continue;
+        }
+
         if (code == 0)
             continue;
 
