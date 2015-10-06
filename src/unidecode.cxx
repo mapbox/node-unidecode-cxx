@@ -11,7 +11,7 @@ void unidecode(string input, stringbuf* output_buf) {
     ostream output_stream(output_buf);
 
     char* str_i = (char*) input.data();
-    char* end = str_i + input.length() + 1;
+    char* end = str_i + input.length();
 
     do {
         uint32_t code;
@@ -22,8 +22,10 @@ void unidecode(string input, stringbuf* output_buf) {
             continue;
         }
 
-        if (code == 0)
+        if (code == 0) {
+            output_buf->sputc('\x00');
             continue;
+        }
 
         if (code > 0xFFFF) {
             output_stream << "_";
