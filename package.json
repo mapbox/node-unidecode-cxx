@@ -9,21 +9,31 @@
     "utf8"
   ],
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "install": "node-pre-gyp install --fallback-to-build"
   },
   "author": "Andrew Pendleton <andrew@mapbox.com>",
   "license": "MIT",
   "dependencies": {
-    "nan": "2.0.9"
+    "nan": "2.0.9",
+    "node-pre-gyp": "0.5.x"
   },
+  "bundledDependencies":["node-pre-gyp"],
   "devDependencies": {
     "mocha": "^2.0.1",
     "unidecode": "*",
-    "request": "*"
+    "request": "*",
+    "aws-sdk": "~2.0.0-rc.15"
   },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/mapbox/node-unidecode-cxx.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/node-unidecode-cxx.git"
+  },
+  "binary": {
+    "module_name": "unidecode",
+    "module_path": "./lib/",
+    "host": "https://mapbox-node-binary.s3.amazonaws.com",
+    "remote_path": "./{name}/v{version}",
+    "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
   }
 }
