@@ -12,10 +12,6 @@ addons:
 
 matrix:
   include:
-     # Coverage
-     - os: osx
-       compiler: clang
-       env: NODE_VERSION="0.10.38" COVERAGE=true
      # Linux
      - os: linux
        compiler: clang
