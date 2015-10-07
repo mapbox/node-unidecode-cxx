@@ -108,9 +108,9 @@ describe("# Match upstream behavior", function() {
 	}
 
 	var urlTests = [
-		["Gutenberg sample 血笑記", "http://www.gutenberg.org/files/34013/34013-0.txt"],
-		["UTF-8 decoder capability and stress test", "http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt"],
-		["Unicode spec emoji sample", "http://www.unicode.org/emoji/charts/emoji-style.html"]
+		["Gutenberg sample 血笑記", "http://mapbox.s3.amazonaws.com/apendleton/34013-0.txt"],
+		["UTF-8 decoder capability and stress test", "http://mapbox.s3.amazonaws.com/apendleton/UTF-8-test.txt"],
+		["Unicode spec emoji sample", "http://mapbox.s3.amazonaws.com/apendleton/emoji-style.html"]
 	];
 	urlTests.forEach(function(row) {
 		it("should parse " + row[0] + " the same as upstream", function(done) {
