@@ -48,7 +48,7 @@ script:
   - npm test
 
 after_success:
-  - if [[ ${COVERAGE} != true ]]; then ./test/travis-publish.sh; fi;
+  - ./test/travis-publish.sh
 
 env:
   global:
