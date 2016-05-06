@@ -10,15 +10,15 @@
   ],
   "scripts": {
     "test": "mocha",
+    "preinstall": "npm install node-pre-gyp",
     "install": "node-pre-gyp install --fallback-to-build"
   },
   "author": "Andrew Pendleton <andrew@mapbox.com>",
   "license": "MIT",
   "dependencies": {
     "nan": "2.0.9",
-    "node-pre-gyp": "0.5.x"
+    "node-pre-gyp": "~0.6.28"
   },
-  "bundledDependencies":["node-pre-gyp"],
   "devDependencies": {
     "mocha": "^2.0.1",
     "unidecode": "*",
