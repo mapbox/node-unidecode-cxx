@@ -24,7 +24,13 @@ describe('# Purity tests', function(){
 	tests.forEach(function(test) {
 		it(test.charCodeAt(0).toString(16) + ' ' + test, function(){
 			var exp = test;
-			var res = unidecode(exp);
+			var res = unidecode.decode(exp);
+			var decodable = unidecode.decodable(exp);
+			if (res.length > 0) {
+				assert.ok(decodable);
+			} else {
+				assert.ok(!decodable);
+			}
 			assert.equal(res, exp);
 		});
 	});
@@ -44,7 +50,7 @@ describe('# Basic string tests', function(){
 	tests.forEach(function(test) {
 		it(test, function(){
 			var exp = test;
-			var res = unidecode(test.toString());
+			var res = unidecode.decode(test.toString());
 			assert.equal(res, exp);
 		});
 	});
@@ -79,7 +85,7 @@ describe('# Complex tests', function(){
 	tests.forEach(function(test) {
 		it(test[0] + '-->' + test[1], function(){
 			var exp = test[1];
-			var res = unidecode(test[0]);
+			var res = unidecode.decode(test[0]);
 			assert.equal(res, exp);
 		});
 	});
@@ -92,7 +98,7 @@ describe("# Match upstream behavior", function() {
 		var error = false;
 		for (var j = 0; j < lines.length; j++) {
 			var upstream = unidecodeOrig(lines[j]);
-			var current = unidecode(lines[j]);
+			var current = unidecode.decode(lines[j]);
 
 			if (upstream != current) {
 				console.log("no match");

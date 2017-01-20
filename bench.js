@@ -2,28 +2,38 @@ var http = require('http');
 var unidecode = require('unidecode');
 var unidecodeCxx = require('./unidecode');
 
+var iterations = 100;
+
 function compare(data) {
     lines = data.split("\n");
 
     console.time("unidecode");
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < iterations; i++) {
         for (var j = 0; j < lines.length; j++) {
             unidecode(lines[j]);
         }
     }
     console.timeEnd("unidecode");
 
-    console.time("unidecodeCxx");
-    for (var i = 0; i < 100; i++) {
+    console.time("cxx decodable");
+    for (var i = 0; i < iterations; i++) {
         for (var j = 0; j < lines.length; j++) {
-            unidecodeCxx(lines[j]);
+            unidecodeCxx.decodable(lines[j]);
         }
     }
-    console.timeEnd("unidecodeCxx");
+    console.timeEnd("cxx decodable");
+
+    console.time("cxx decode");
+    for (var i = 0; i < iterations; i++) {
+        for (var j = 0; j < lines.length; j++) {
+            unidecodeCxx.decode(lines[j]);
+        }
+    }
+    console.timeEnd("cxx decode");
 }
 
 console.log("Retrieving file...");
-http.get("http://www.gutenberg.org/files/34013/34013-0.txt", function(response) {
+http.get("http://mapbox.s3.amazonaws.com/apendleton/34013-0.txt", function(response) {
     var body = '';
     response.on('data', function (chunk) {
         body += chunk;
