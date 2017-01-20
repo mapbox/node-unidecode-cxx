@@ -31,7 +31,6 @@ NAN_METHOD(decode) {
           info.GetReturnValue().Set(Nan::New(output.data(),output.size()).ToLocalChecked());
       }
   } catch (std::exception const& ex) {
-      //std::clog << ex.what() << "\n";
       return Nan::ThrowTypeError(ex.what());
   }
 }
