@@ -17,8 +17,7 @@
 
 NAN_METHOD(decode) {
   try {
-      v8::Local<v8::String> val = info[0].As<v8::String>();
-      v8::String::Utf8Value utf8_value(val);
+      Nan::Utf8String utf8_value(info[0]);
       int len = utf8_value.length();
       if (len <= 0) {
           // This is done to match behavior of JS module
@@ -37,8 +36,7 @@ NAN_METHOD(decode) {
 
 NAN_METHOD(decodable) {
   try {
-      v8::Local<v8::String> val = info[0].As<v8::String>();
-      v8::String::Utf8Value utf8_value(val);
+      Nan::Utf8String utf8_value(info[0]);
       int len = utf8_value.length();
       if (len <= 0) {
           // This is done to match behavior of JS module
