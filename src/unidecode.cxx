@@ -1,25 +1,24 @@
+
 #include <string>
 #include "../deps/utf8cpp/utf8.h"
-
 #include "data.cxx"
 
-using namespace std;
+void unidecode(const char * data, std::size_t len, std::string & output) {
 
-void unidecode(string* input, string* output) {
-    char* str_i = (char*) input->data();
-    char* end = str_i + input->length();
+    const char* str_i = data;
+    const char* end = str_i + len;
 
-    do {
-        uint32_t code;
+    while (str_i < end) {
+        uint32_t code = 0;
         try {
             code = utf8::next(str_i, end); // get 32 bit code of a utf-8 symbol
-        } catch (utf8::exception) {
+        } catch (std::exception const &) {
             str_i++;
             continue;
         }
 
         if (code == 0) {
-            *output += '\x00';
+            output += '\x00';
             continue;
         }
 
@@ -33,7 +32,6 @@ void unidecode(string* input, string* output) {
             continue;
         } else {
             uint32_t h = code >> 8;
-            uint32_t l = code & 0xFF;
 
             // (18) 18 > h < 1e (30)
             if (h > 24 && h < 30) continue;
@@ -42,14 +40,46 @@ void unidecode(string* input, string* output) {
             if (h > 215 && h < 249) continue;
 
             if (UNIDECODE_DATA[h]) {
-                *output += UNIDECODE_DATA[h][l];
+                uint32_t l = code & 0xFF;
+                output += UNIDECODE_DATA[h][l];
             }
         }
-    } while (str_i < end);
+    }
 }
 
-// int main() {
-//     stringbuf output_buf;
-//     unidecode("\xe0\xb4\x85\xe0\xb4\xad\xe0\xb4\xbf\xe0\xb4\x9c\xe0\xb5\x80\xe0\xb4\xa4", &output_buf);
-//     cout << output_buf.str() << endl;
-// }
+bool can_decode(const char * data, std::size_t len) {
+    const char* str_i = data;
+    const char* end = str_i + len;
+
+    bool hit = false;
+    try {
+        while (str_i < end) {
+            uint32_t code = 0;
+            try {
+                code = utf8::next(str_i, end);
+            } catch (std::exception const &) {
+                str_i++;
+                continue;
+            }
+
+            if (code == 0) {
+                hit = true;
+                continue;
+            }
+
+            if (code > 0xFFFF) {
+                continue;
+            } else {
+                uint32_t h = code >> 8;
+                if (h > 24 && h < 30) continue;
+                if (h > 215 && h < 249) continue;
+                if (UNIDECODE_DATA[h]) {
+                    hit = true;
+                }
+            }
+        };
+    } catch (std::exception const&) {
+        return false;
+    }
+    return true;
+}

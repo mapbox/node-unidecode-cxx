@@ -134,7 +134,7 @@ namespace utf8
     }
 
     template <typename octet_iterator>
-    uint32_t next(octet_iterator& it, octet_iterator end)
+    FORCE_INLINE uint32_t next(octet_iterator& it, octet_iterator end)
     {
         uint32_t cp = 0;
         internal::utf_error err_code = utf8::internal::validate_next(it, end, cp);

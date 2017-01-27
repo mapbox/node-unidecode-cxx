@@ -1,33 +1,38 @@
 {
-  "targets": [
+  'includes': [ 'common.gypi' ],
+  'targets': [
     {
-      "target_name": "unidecode",
-      "sources": [
-        "src/addon.cxx"
+      'target_name': '<(module_name)',
+      'product_dir': '<(module_path)',
+      'sources': [
+        "./src/addon.cxx"
       ],
-      "include_dirs"  : [
-            "<!(node -e \"require('nan')\")"
+      "include_dirs" : [
+          'src/',
+          '<!(node -e \'require("nan")\')'
       ],
-      "cflags": ["-g"],
-      'cflags_cc!': [ '-fno-exceptions' ],
-      'conditions': [
-        ['OS=="mac"', {
-          'xcode_settings': {
-            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
-          }
-        }]
-      ]
-    },
-    {
-      "target_name": "action_after_build",
-      "type": "none",
-      "dependencies": [ "<(module_name)" ],
-      "copies": [
-        {
-          "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
-          "destination": "<(module_path)"
-        }
-      ]
+      'cflags_cc!': ['-fno-rtti', '-fno-exceptions'],
+      'cflags_cc' : [
+          '-Wconversion'
+      ],
+      'ldflags': [
+        '-Wl,-z,now',
+      ],
+      'xcode_settings': {
+        'OTHER_LDFLAGS':[
+          '-Wl,-bind_at_load'
+        ],
+        'OTHER_CPLUSPLUSFLAGS':[
+           '-Wshadow',
+           '-Wconversion'
+        ],
+        'GCC_ENABLE_CPP_RTTI': 'YES',
+        'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+        'MACOSX_DEPLOYMENT_TARGET':'10.8',
+        'CLANG_CXX_LIBRARY': 'libc++',
+        'CLANG_CXX_LANGUAGE_STANDARD':'c++14',
+        'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0'
+      }
     }
   ]
 }
