@@ -19,7 +19,7 @@ size_t unidecode(const char * data, std::size_t len, char * output) {
         }
 
         if (code == 0) {
-            output[idx++] += '\x00';
+            output[idx++] = '\x00';
             continue;
         }
 
