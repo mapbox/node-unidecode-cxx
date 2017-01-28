@@ -14,6 +14,8 @@ var unidecodeOrig = require("unidecode");
 var request = require('request');
 var fs = require('fs');
 
+var Decoder = new unidecode.Decoder();
+
 describe('# Purity tests', function(){
 	var code;
 	var tests = [];
@@ -25,6 +27,8 @@ describe('# Purity tests', function(){
 		it(test.charCodeAt(0).toString(16) + ' ' + test, function(){
 			var exp = test;
 			var res = unidecode.decode(exp);
+			var res2 = Decoder.decode(exp);
+			assert(res == res2,res + ' ' + res2 + ' should be the same');
 			var decodable = unidecode.decodable(exp);
 			if (res.length > 0) {
 				assert.ok(decodable);
@@ -50,7 +54,7 @@ describe('# Basic string tests', function(){
 	tests.forEach(function(test) {
 		it(test, function(){
 			var exp = test;
-			var res = unidecode.decode(test.toString());
+			var res = Decoder.decode(test.toString());
 			assert.equal(res, exp);
 		});
 	});
@@ -85,7 +89,7 @@ describe('# Complex tests', function(){
 	tests.forEach(function(test) {
 		it(test[0] + '-->' + test[1], function(){
 			var exp = test[1];
-			var res = unidecode.decode(test[0]);
+			var res = Decoder.decode(test[0]);
 			assert.equal(res, exp);
 		});
 	});
@@ -98,7 +102,7 @@ describe("# Match upstream behavior", function() {
 		var error = false;
 		for (var j = 0; j < lines.length; j++) {
 			var upstream = unidecodeOrig(lines[j]);
-			var current = unidecode.decode(lines[j]);
+			var current = Decoder.decode(lines[j]);
 
 			if (upstream != current) {
 				console.log("no match");
