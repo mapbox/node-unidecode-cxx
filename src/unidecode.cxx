@@ -39,9 +39,13 @@ void unidecode(const char * data, std::size_t len, std::string & output) {
             //(d7) 215 > h < 249 (f9) no supported
             if (h > 215 && h < 249) continue;
 
-            if (UNIDECODE_DATA[h]) {
+            const auto * static_data = UNIDECODE_DATA[h];
+            if (static_data) {
                 uint32_t l = code & 0xFF;
-                output += UNIDECODE_DATA[h][l];
+                auto const& row = static_data[l];
+                if (!row.empty()) {
+                    output.append(row.data(),row.size());;
+                }
             }
         }
     }
