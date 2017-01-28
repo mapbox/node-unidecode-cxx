@@ -3,11 +3,12 @@
 #include "../deps/utf8cpp/utf8.h"
 #include "data.cxx"
 
-void unidecode(const char * data, std::size_t len, std::string & output) {
+size_t unidecode(const char * data, std::size_t len, char * output) {
 
     const char* str_i = data;
     const char* end = str_i + len;
 
+    size_t idx = 0;
     while (str_i < end) {
         uint32_t code = 0;
         try {
@@ -18,7 +19,7 @@ void unidecode(const char * data, std::size_t len, std::string & output) {
         }
 
         if (code == 0) {
-            output += '\x00';
+            output[idx++] += '\x00';
             continue;
         }
 
@@ -43,12 +44,14 @@ void unidecode(const char * data, std::size_t len, std::string & output) {
             if (static_data) {
                 uint32_t l = code & 0xFF;
                 auto const& row = static_data[l];
-                if (!row.empty()) {
-                    output.append(row.data(),row.size());;
+                std::uint8_t row_size = row.size();
+                for (std::uint8_t i=0;i<row_size;++i) {
+                    output[idx++] = row[i];
                 }
             }
         }
     }
+    return idx;
 }
 
 bool can_decode(const char * data, std::size_t len) {
