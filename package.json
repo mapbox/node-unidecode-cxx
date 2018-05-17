@@ -1,6 +1,6 @@
 {
   "name": "unidecode-cxx",
-  "version": "0.0.2",
+  "version": "0.0.2-devtmpmapsam",
   "description": "node-unidecode ported to C++",
   "main": "./unidecode",
   "keywords": [
