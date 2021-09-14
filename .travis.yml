@@ -34,8 +34,7 @@ env:
 
 before_install:
   - if ! [ -x "$(command -v aws)" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" ; unzip awscliv2.zip ; sudo ./aws/install ; fi
-  - aws configure
-  - aws sts get-caller-identity
+  - AWS_ACCESS_KEY_ID=${node_pre_gyp_accessKeyId} AWS_SECRET_ACCESS_KEY=${node_pre_gyp_secretAccessKey} aws sts get-caller-identity
   - if [[ $(uname -s) == 'Linux' ]]; then
       export CXX="clang++-3.5";
       export CC="clang-3.5";
