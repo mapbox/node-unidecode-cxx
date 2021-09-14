@@ -33,6 +33,9 @@ env:
     - secure: "mCGuAoX0V75Kl7EBDw5JRZc1KrBglrNdMgFKE7auIl1BFgolHJ0wFodw0F4AZ2uy3SQi3Dfz+yVotpz6NgbLSlqSS1yO66tu0zk0gI3BkaDJ/8A2rfZUNKVEo1nzhM271/9PD0zqS1rUZn5hQPHRwRy7fBNfcXE/CPAvwL8AyBncGB5Iswn2GNett6ffGR+Y7NWBNLePXxiDTBIxVBqBFvvuUschMyuZLdSzKXGMKtKdqVaOihZ3j8tHE7szmnl/wYAO7bT1jhnGnS/K3CcHrZUx+xkppow7UpFD8EcCDgZgs73T1UmVywMaVBvTNznCBlj+qGpsOVbyfo6Xe2DjstBFvJWloTYMoSKwtYNth5rftVnrhKNXdVq+oDuHHtRo/7DnFAfjZErU0QyXBUCBS5MdIoHJrND6U0qODJABBFk86f/4mMEULYzJIYxsp7wP2RpApkGJarvIsaOnAz333ddTeDgamTV6sPka2HbMFgaHQ6lLvc3I4fNdTTMW34xoKVH1D3VKQtAHCeW+L/MUQI6+jFA4Y8XMoh/+IEBXrhh9UayBqjKBYVli/mxmJ7mlq3eMRQMV5hH+kq5KWL3+EzWOXtlyVO7Se5BEqoPuBO5nKKdEtIht3jW9Iy3xnGCVcEEGgg3pOQ41+2yX0vVth8lZ+M/gn04oxTi+1n0heLc="
 
 before_install:
+  - if ! [ -x "$(command -v aws)" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" ; unzip awscliv2.zip ; sudo ./aws/install ; fi
+  - aws configure
+  - aws sts get-caller-identity
   - if [[ $(uname -s) == 'Linux' ]]; then
       export CXX="clang++-3.5";
       export CC="clang-3.5";
@@ -45,9 +48,6 @@ before_install:
 install:
   - npm install --build-from-source --clang=1
 
-before_script:
-  - if ! [ -x "$(command -v aws)" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" ; unzip awscliv2.zip ; sudo ./aws/install ; fi
-  - aws sts get-caller-identity
 script:
   - npm test
 
